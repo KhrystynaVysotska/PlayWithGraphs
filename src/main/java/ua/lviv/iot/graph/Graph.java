@@ -95,7 +95,7 @@ public class Graph<T> {
 	 * @param vertexPosition the position of vertex to find
 	 * @throws NoSuchElementException    if there is no such vertex in the graph
 	 * @throws IndexOutOfBoundsException if the position is out of range
-	 * @return List<Integer> with positions of neighbors for this vertex position
+	 * @return vertex value for this vertex position
 	 */
 	public T getVertexAt(int vertexPosition) {
 		if (exists(vertices.get(vertexPosition))) {
@@ -111,7 +111,7 @@ public class Graph<T> {
 	 * </p>
 	 *
 	 * @param vertex the vertex to find position for
-	 * @return List<Integer> with positions of neighbors for this vertex position;
+	 * @return  vertex position for this vertex value;
 	 *         -1 if there is no such vertex in graph
 	 */
 	public int getPositionOf(T vertex) {
