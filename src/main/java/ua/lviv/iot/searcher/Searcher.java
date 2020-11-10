@@ -14,7 +14,9 @@ public class Searcher {
 		for (int counter = 0; counter < numberOfVertices; counter++) {
 			isVisited[counter] = false;
 		}
-		depthFirstSearch(0, graph, optimalSequence, isVisited);
+		for (int i = 0; i < graph.numberOfVertices(); i++) {
+			depthFirstSearch(i, graph, optimalSequence, isVisited);
+		}
 		return optimalSequence;
 	}
 
