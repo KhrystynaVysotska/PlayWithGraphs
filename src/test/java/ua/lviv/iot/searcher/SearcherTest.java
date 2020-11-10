@@ -100,4 +100,39 @@ public class SearcherTest {
 		assertEquals(result.get(1), "foreignpassport");
 		assertEquals(result.get(2), "visa");
 	}
+	@Test
+	public void findOptimalSequenceFifthTest() {
+		Graph<String> graph = new Graph<>();
+		graph.addVertex("a");
+		graph.addVertex("b");
+		graph.addVertex("c");
+		graph.addEdge("a", "b");
+		graph.addEdge("c", "a");
+		Searcher searcher = new Searcher();
+		List<String> result = searcher.findOptimalSequenceFor(graph);
+		for(int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i));
+		}
+		assertEquals(result.get(0), "b");
+		assertEquals(result.get(1), "a");
+		assertEquals(result.get(2), "c");
+	}
+	@Test
+	public void findOptimalSequenceSixthTest() {
+		Graph<String> graph = new Graph<>();
+		graph.addVertex("a");
+		graph.addVertex("b");
+		graph.addVertex("c");
+		graph.addVertex("d");
+		graph.addEdge("a", "b");
+		graph.addEdge("c", "d");
+		Searcher searcher = new Searcher();
+		List<String> result = searcher.findOptimalSequenceFor(graph);
+		for(int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i));
+		}
+//		assertEquals(result.get(0), "b");
+//		assertEquals(result.get(1), "a");
+//		assertEquals(result.get(2), "c");
+	}
 }
