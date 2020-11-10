@@ -110,9 +110,6 @@ public class SearcherTest {
 		graph.addEdge("c", "a");
 		Searcher searcher = new Searcher();
 		List<String> result = searcher.findOptimalSequenceFor(graph);
-		for(int i = 0; i < result.size(); i++) {
-			System.out.println(result.get(i));
-		}
 		assertEquals(result.get(0), "b");
 		assertEquals(result.get(1), "a");
 		assertEquals(result.get(2), "c");
@@ -128,11 +125,9 @@ public class SearcherTest {
 		graph.addEdge("c", "d");
 		Searcher searcher = new Searcher();
 		List<String> result = searcher.findOptimalSequenceFor(graph);
-		for(int i = 0; i < result.size(); i++) {
-			System.out.println(result.get(i));
-		}
-//		assertEquals(result.get(0), "b");
-//		assertEquals(result.get(1), "a");
-//		assertEquals(result.get(2), "c");
+		assertEquals(result.get(0), "b");
+		assertEquals(result.get(1), "a");
+		assertEquals(result.get(2), "d");
+		assertEquals(result.get(3), "c");
 	}
 }
