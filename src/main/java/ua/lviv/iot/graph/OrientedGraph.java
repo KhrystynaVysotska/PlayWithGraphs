@@ -1,9 +1,9 @@
 package ua.lviv.iot.graph;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * An oriented graph build as adjacency list with parameterized vertices.
@@ -11,10 +11,10 @@ import java.util.Map;
  * @author Khrystyna Vysotska
  */
 public class OrientedGraph<T> {
-	Map<T, List<T>> orientedGraph;
+	Map<T, ArrayList<T>> orientedGraph;
 
 	public OrientedGraph() {
-		orientedGraph = new HashMap<>();
+		orientedGraph = new LinkedHashMap<>();
 	}
 
 	/**
@@ -41,9 +41,7 @@ public class OrientedGraph<T> {
 	 * @return nothing
 	 */
 	public void addVertex(T vertex) {
-		if (!exists(vertex)) {
-			orientedGraph.put(vertex, new ArrayList<T>());
-		}
+		orientedGraph.putIfAbsent(vertex, new ArrayList<T>());
 	}
 
 	/**
@@ -63,6 +61,19 @@ public class OrientedGraph<T> {
 
 	/**
 	 * <p>
+	 * Finds all vertices for this vertex.
+	 * </p>
+	 *
+	 * @param vertex vertex to get adjacent vertices for
+	 * @return List with adjacent vertices for this vertex if this vertex exists;
+	 *         null otherwise
+	 */
+	public Set<T> getVertices() {
+		return orientedGraph.keySet();
+	}
+
+	/**
+	 * <p>
 	 * Finds adjacent vertices for this vertex.
 	 * </p>
 	 *
@@ -70,7 +81,7 @@ public class OrientedGraph<T> {
 	 * @return List with adjacent vertices for this vertex if this vertex exists;
 	 *         null otherwise
 	 */
-	public List<T> getNeighborsFor(T vertex) {
+	public ArrayList<T> getNeighborsFor(T vertex) {
 		return orientedGraph.get(vertex);
 	}
 
