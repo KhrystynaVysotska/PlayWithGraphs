@@ -1,35 +1,40 @@
 package ua.lviv.iot.searcher;
 
 import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.LinkedList;
 import java.util.List;
+import ua.lviv.iot.graph.OrientedGraph;
 
-import ua.lviv.iot.graph.Graph;
+public class OptimalSequenceSearcher {
 
-public class Searcher {
-
-	public List<String> findOptimalSequenceFor(Graph<String> graph) {
+	public List<String> findOptimalSequenceFor(OrientedGraph<String> graph) {
 		int numberOfVertices = graph.numberOfVertices();
-		List<String> optimalSequence = new ArrayList<String>(numberOfVertices);
-		boolean[] isVisited = new boolean[numberOfVertices];
-		for (int counter = 0; counter < numberOfVertices; counter++) {
-			isVisited[counter] = false;
-		}
-		for (int i = 0; i < graph.numberOfVertices(); i++) {
-			depthFirstSearch(i, graph, optimalSequence, isVisited);
+		BitSet isVisited = new BitSet(numberOfVertices);
+		ArrayList<String> vertices = new ArrayList<>(graph.getVertices());
+		return depthFirstSearch(vertices, graph, isVisited);
+	}
+
+	public List<String> depthFirstSearch(ArrayList<String> vertices, OrientedGraph<String> graph, BitSet isVisited) {
+		List<String> optimalSequence = new LinkedList<>();
+		int numberOfVertices = graph.numberOfVertices();
+		for (int vertexPosition = 0; vertexPosition < numberOfVertices; vertexPosition++) {
+			depthFirstSearch(vertexPosition, vertices, graph, isVisited, optimalSequence);
 		}
 		return optimalSequence;
 	}
 
-	private void depthFirstSearch(int currentVertexPosition, Graph<String> graph, List<String> optimalSequence,
-			boolean[] isVisited) {
-		if (isVisited[currentVertexPosition]) {
+	protected void depthFirstSearch(int startVertexPosition, ArrayList<String> vertices, OrientedGraph<String> graph,
+			BitSet isVisited, List<String> optimalSequence) {
+		if (isVisited.get(startVertexPosition)) {
 			return;
 		}
-		isVisited[currentVertexPosition] = true;
-		List<Integer> currentVertexNeighborPositions = graph.getNeighborPositionsFor(currentVertexPosition);
-		for (int neighborPosition = 0; neighborPosition < currentVertexNeighborPositions.size(); neighborPosition++) {
-			depthFirstSearch(currentVertexNeighborPositions.get(neighborPosition), graph, optimalSequence, isVisited);
+		isVisited.set(startVertexPosition);
+		String currentVertex = vertices.get(startVertexPosition);
+		ArrayList<String> currentVertexNeighbors = graph.getNeighborsFor(currentVertex);
+		for (String neighbor : currentVertexNeighbors) {
+			depthFirstSearch(vertices.indexOf(neighbor), vertices, graph, isVisited, optimalSequence);
 		}
-		optimalSequence.add(graph.getVertexAt(currentVertexPosition));
+		optimalSequence.add(currentVertex);
 	}
 }
