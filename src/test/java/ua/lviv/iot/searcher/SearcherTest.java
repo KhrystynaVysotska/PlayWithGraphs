@@ -1,133 +1,83 @@
 package ua.lviv.iot.searcher;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import ua.lviv.iot.graph.Graph;
+import ua.lviv.iot.graph.OrientedGraph;
 
 public class SearcherTest {
+	private OrientedGraph<String> orientedGraph;
+	private OptimalSequenceSearcher optimalSequenceSearcher = new OptimalSequenceSearcher();
 
-	@Test
-	public void findOptimalSequenceFirstTest() {
-		Graph<String> graph = new Graph<>();
-		graph.addVertex("visa");
-		graph.addVertex("foreignpassport");
-		graph.addEdge("visa", "foreignpassport");
-		Searcher searcher = new Searcher();
-		List<String> result = searcher.findOptimalSequenceFor(graph);
-		assertEquals(result.get(0), "foreignpassport");
-		assertEquals(result.get(1), "visa");
+	@Before
+	public void initializeGraph() {
+		orientedGraph = new OrientedGraph<>();
 	}
 
 	@Test
-	public void findOptimalSequenceSecondTest() {
-		Graph<String> graph = new Graph<>();
-		graph.addVertex("visa");
-		graph.addVertex("foreignpassport");
-		graph.addVertex("visa");
-		graph.addVertex("hotel");
-		graph.addVertex("visa");
-		graph.addVertex("bankstatement");
-		graph.addVertex("bankstatement");
-		graph.addVertex("nationalpassport");
-		graph.addVertex("hotel");
-		graph.addVertex("creditcard");
-		graph.addVertex("creditcard");
-		graph.addVertex("nationalpassport");
-		graph.addVertex("nationalpassport");
-		graph.addVertex("birthcertificate");
-		graph.addVertex("foreignpassport");
-		graph.addVertex("nationalpassport");
-		graph.addVertex("foreignpassport");
-		graph.addVertex("militarycertificate");
-		graph.addVertex("militarycertificate");
-		graph.addVertex("nationalpassport");
-		graph.addEdge("visa", "foreignpassport");
-		graph.addEdge("nationalpassport", "birthcertificate");
-		graph.addEdge("visa", "hotel");
-		graph.addEdge("foreignpassport", "militarycertificate");
-		graph.addEdge("visa", "bankstatement");
-		graph.addEdge("bankstatement", "nationalpassport");
-		graph.addEdge("hotel", "creditcard");
-		graph.addEdge("militarycertificate", "nationalpassport");
-		graph.addEdge("foreignpassport", "nationalpassport");
-		graph.addEdge("creditcard", "nationalpassport");
-		Searcher searcher = new Searcher();
-		List<String> result = searcher.findOptimalSequenceFor(graph);
-		assertEquals(result.get(0), "birthcertificate");
-		assertEquals(result.get(1), "nationalpassport");
-		assertEquals(result.get(2), "militarycertificate");
-		assertEquals(result.get(3), "foreignpassport");
-		assertEquals(result.get(4), "creditcard");
-		assertEquals(result.get(5), "hotel");
-		assertEquals(result.get(6), "bankstatement");
-		assertEquals(result.get(7), "visa");
+	public void findOptimalSequenceTestWithOneEdge() {
+		orientedGraph.addEdge("visa", "foreignpassport");
+		List<String> result = optimalSequenceSearcher.findOptimalSequenceFor(orientedGraph);
+		String[] expectedResult = { "foreignpassport", "visa" };
+		assertArrayEquals(expectedResult, result.toArray());
 	}
 
 	@Test
-	public void findOptimalSequenceThirdTest() {
-		Graph<String> graph = new Graph<>();
-		graph.addVertex("visa");
-		graph.addVertex("foreignpassport");
-		graph.addVertex("foreignpassport");
-		graph.addVertex("birthcertificate");
-		graph.addEdge("visa", "foreignpassport");
-		graph.addEdge("foreignpassport", "birthcertificate");
-		Searcher searcher = new Searcher();
-		List<String> result = searcher.findOptimalSequenceFor(graph);
-		assertEquals(result.get(0), "birthcertificate");
-		assertEquals(result.get(1), "foreignpassport");
-		assertEquals(result.get(2), "visa");
+	public void findOptimalSequenceTestWithSeveralEdges() {
+		orientedGraph.addEdge("visa", "foreignpassport");
+		orientedGraph.addEdge("nationalpassport", "birthcertificate");
+		orientedGraph.addEdge("visa", "hotel");
+		orientedGraph.addEdge("foreignpassport", "militarycertificate");
+		orientedGraph.addEdge("visa", "bankstatement");
+		orientedGraph.addEdge("bankstatement", "nationalpassport");
+		orientedGraph.addEdge("hotel", "creditcard");
+		orientedGraph.addEdge("militarycertificate", "nationalpassport");
+		orientedGraph.addEdge("foreignpassport", "nationalpassport");
+		orientedGraph.addEdge("creditcard", "nationalpassport");
+		List<String> result = optimalSequenceSearcher.findOptimalSequenceFor(orientedGraph);
+		String[] expectedResult = { "birthcertificate", "nationalpassport", "militarycertificate", "foreignpassport",
+				"creditcard", "hotel", "bankstatement", "visa" };
+		assertArrayEquals(expectedResult, result.toArray());
 	}
+
 	@Test
-	public void findOptimalSequenceForthTest() {
-		Graph<String> graph = new Graph<>();
-		graph.addVertex("visa");
-		graph.addVertex("foreignpassport");
-		graph.addVertex("visa");
-		graph.addVertex("birthcertificate");
-		graph.addVertex("foreignpassport");
-		graph.addVertex("birthcertificate");
-		graph.addEdge("visa", "foreignpassport");
-		graph.addEdge("foreignpassport", "birthcertificate");
-		graph.addEdge("visa", "birthcertificate");
-		Searcher searcher = new Searcher();
-		List<String> result = searcher.findOptimalSequenceFor(graph);
-		assertEquals(result.get(0), "birthcertificate");
-		assertEquals(result.get(1), "foreignpassport");
-		assertEquals(result.get(2), "visa");
+	public void findOptimalSequenceTestWithTwoEdges() {
+		orientedGraph.addEdge("visa", "foreignpassport");
+		orientedGraph.addEdge("foreignpassport", "birthcertificate");
+		List<String> result = optimalSequenceSearcher.findOptimalSequenceFor(orientedGraph);
+		String[] expectedResult = { "birthcertificate", "foreignpassport", "visa" };
+		assertArrayEquals(expectedResult, result.toArray());
 	}
+
 	@Test
-	public void findOptimalSequenceFifthTest() {
-		Graph<String> graph = new Graph<>();
-		graph.addVertex("a");
-		graph.addVertex("b");
-		graph.addVertex("c");
-		graph.addEdge("a", "b");
-		graph.addEdge("c", "a");
-		Searcher searcher = new Searcher();
-		List<String> result = searcher.findOptimalSequenceFor(graph);
-		assertEquals(result.get(0), "b");
-		assertEquals(result.get(1), "a");
-		assertEquals(result.get(2), "c");
+	public void findOptimalSequenceTestWithThreeEdges() {
+		orientedGraph.addEdge("visa", "foreignpassport");
+		orientedGraph.addEdge("foreignpassport", "birthcertificate");
+		orientedGraph.addEdge("visa", "birthcertificate");
+		List<String> result = optimalSequenceSearcher.findOptimalSequenceFor(orientedGraph);
+		String[] expectedResult = { "birthcertificate", "foreignpassport", "visa" };
+		assertArrayEquals(expectedResult, result.toArray());
 	}
+
 	@Test
-	public void findOptimalSequenceSixthTest() {
-		Graph<String> graph = new Graph<>();
-		graph.addVertex("a");
-		graph.addVertex("b");
-		graph.addVertex("c");
-		graph.addVertex("d");
-		graph.addEdge("a", "b");
-		graph.addEdge("c", "d");
-		Searcher searcher = new Searcher();
-		List<String> result = searcher.findOptimalSequenceFor(graph);
-		assertEquals(result.get(0), "b");
-		assertEquals(result.get(1), "a");
-		assertEquals(result.get(2), "d");
-		assertEquals(result.get(3), "c");
+	public void findOptimalSequenceTestWithRootNodeInTheMiddle() {
+		orientedGraph.addEdge("a", "b");
+		orientedGraph.addEdge("c", "a");
+		List<String> result = optimalSequenceSearcher.findOptimalSequenceFor(orientedGraph);
+		String[] expectedResult = { "b", "a", "c" };
+		assertArrayEquals(expectedResult, result.toArray());
+	}
+
+	@Test
+	public void findOptimalSequenceTestWithTwoRootNodes() {
+		orientedGraph.addEdge("a", "b");
+		orientedGraph.addEdge("c", "d");
+		List<String> result = optimalSequenceSearcher.findOptimalSequenceFor(orientedGraph);
+		String[] expectedResult = { "b", "a", "d", "c" };
+		assertArrayEquals(expectedResult, result.toArray());
 	}
 }
